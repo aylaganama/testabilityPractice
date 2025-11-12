@@ -17,8 +17,14 @@ public class SAP_BasedInvoiceSender {
     // Method to send all low-valued invoices to the SAP system
     public void sendLowValuedInvoices() {
         List<Invoice> lowValuedInvoices = filter.lowValueInvoices();
-        for (Invoice invoice : lowValuedInvoices) {  // Iterates through each invoice in the list
-            sap.send(invoice);  // Sends the current invoice to the SAP system
+        for (Invoice invoice : lowValuedInvoices) {
+            try {
+                sap.send(invoice);
+            } catch (Exception e) {
+                // Just print the invoice itself instead of invoice.getId()
+                System.err.println("Failed to send invoice: " + invoice + " | Reason: " + e.getMessage());
+            }
         }
     }
+
 }
